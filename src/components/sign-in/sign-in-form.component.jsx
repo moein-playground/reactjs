@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
   createUserDocumentFromAuth,
   signInWithGooglePopup,
@@ -6,7 +6,7 @@ import {
 } from '../../utils/firebase-utils/firebase.utils';
 import FormInput from '../../components/form-input/form-input.component';
 import Button from '../button/button.component';
-
+import { UserContext } from '../../contex/user.contex';
 import './sign-in-form.styles.scss';
 
 const defaultFormFileds = {
@@ -16,8 +16,8 @@ const defaultFormFileds = {
 
 const SignInForm = () => {
   const [formFileds, setFormFileds] = useState(defaultFormFileds);
-
   const { email, password } = formFileds;
+  const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFileds = () => {
     setFormFileds(defaultFormFileds);
@@ -33,9 +33,9 @@ const SignInForm = () => {
   const handelSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await signInWithUserEmailAndPassword(email, password);
+      const { user } = await signInWithUserEmailAndPassword(email, password);
+      setCurrentUser(user);
       resetFormFileds();
-      console.log(response);
     } catch (error) {
       // TODO:you can add more error handeling like switch case ...
       // auth-wrong-paswword / auth-user-not-found / ...
