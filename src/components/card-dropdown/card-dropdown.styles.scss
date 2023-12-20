@@ -20,9 +20,12 @@
     height: 240px;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: scroll;
   }
-
+  //
+  div::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera this css Hide scrollbar */
+  }
   button {
     margin-top: auto;
   }
