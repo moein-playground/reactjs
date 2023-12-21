@@ -10,7 +10,14 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  writeBatch,
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_APIKEY,
@@ -40,6 +47,26 @@ export const signInWithGooglePopup = () =>
 //   signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd,
+  filed = 'title',
+) => {
+  const collectionRef = collection(db, collectionKey);
+
+  // For having successful transaction we need batch
+  // TODO: What is batch ?
+  const batch = writeBatch(db);
+
+  // with batch we can attach bunch of functions together like, write, set, read, delete, ...
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object[filed].toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log('Done');
+};
 
 export const createUserDocumentFromAuth = async (
   userAuth,
@@ -82,4 +109,3 @@ export const signOutUser = async () => {
 
 export const onAuthStateChangeListener = (callback) =>
   onAuthStateChanged(auth, callback);
-
