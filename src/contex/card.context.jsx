@@ -1,4 +1,6 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useReducer } from 'react';
+import { createAction } from '../utils/reducer/reducer.utils';
+import { act } from 'react-dom/test-utils';
 
 const existingCardItem = (cardItems, product) =>
   cardItems.find((cardItem) => cardItem.id === product.id);
@@ -32,48 +34,92 @@ const clearCard = (cardItems, cardId) =>
   cardItems.filter((cardItem) => cardItem.id !== cardId);
 
 export const CardContext = createContext({
-  isCardOpen: false,
   setIsCardOpen: () => {},
-  cardItems: [],
   addItemToCard: () => {},
   removeItemFromCard: () => {},
   clearCardItem: () => {},
+  cardItems: [],
+  isCardOpen: false,
   cardCount: 0,
   cardTotal: 0,
 });
 
-export const CardProvider = ({ children }) => {
-  const [isCardOpen, setIsCardOpen] = useState(false);
-  const [cardItems, setCardItems] = useState([]);
-  const [cardCount, setCardCount] = useState(0);
-  const [cardTotal, setCardTotal] = useState(0);
+export const CARD_ACTION_TYPE_ACTION = {
+  SET_CARD_ITEMS: 'SET_CARD_ITEMS',
+  SET_IS_CARD_OPEN: 'SET_IS_CARD_OPEN',
+};
 
-  useEffect(() => {
-    const newCardCount = cardItems.reduce(
+const INITIAL_STATE = {
+  cardItems: [],
+  isCardOpen: false,
+  cardCount: 0,
+  cardTotal: 0,
+};
+
+const cardReducer = (state, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case CARD_ACTION_TYPE_ACTION.SET_CARD_ITEMS:
+      console.log('inam payload');
+      console.log(payload);
+      return {
+        ...state,
+        ...payload,
+      };
+    case CARD_ACTION_TYPE_ACTION.SET_IS_CARD_OPEN:
+      return {
+        ...state,
+        isCardOpen: payload,
+      };
+    default:
+      throw new Error(`unhandled type of ${type} in cardReducer`);
+  }
+};
+
+export const CardProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(cardReducer, INITIAL_STATE);
+
+  const { cardItems, cardTotal, cardCount, isCardOpen } = state;
+
+  const updateCardItemsReducer = (newCardItems) => {
+    const newCardCount = newCardItems.reduce(
       (total, cardItem) => total + cardItem.quantity,
       0,
     );
-    setCardCount(newCardCount);
-  }, [cardItems]);
-
-  useEffect(() => {
-    const newCardTotal = cardItems.reduce(
+    const newCardTotal = newCardItems.reduce(
       (total, cardItem) => total + cardItem.quantity * cardItem.price,
       0,
     );
-    setCardTotal(newCardTotal);
-  }, [cardItems]);
+    console.log(newCardCount);
+    console.log(newCardTotal);
+
+    dispatch(
+      createAction(CARD_ACTION_TYPE_ACTION.SET_CARD_ITEMS, {
+        cardItems: newCardItems,
+        cardCount: newCardCount,
+        cardTotal: newCardTotal,
+      }),
+    );
+  };
 
   const addItemToCard = (productToAdd) => {
-    setCardItems(addCardItem(cardItems, productToAdd));
+    const newCardItems = addCardItem(cardItems, productToAdd);
+    updateCardItemsReducer(newCardItems);
   };
 
   const removeItemFromCard = (cardToRemove) => {
-    setCardItems(removeCardItem(cardItems, cardToRemove));
+    const newCardItems = removeCardItem(cardItems, cardToRemove);
+    updateCardItemsReducer(newCardItems);
   };
   const clearCardItem = (cardId) => {
-    setCardItems(clearCard(cardItems, cardId));
+    const newCardItems = clearCard(cardItems, cardId);
+    updateCardItemsReducer(newCardItems);
   };
+
+  const setIsCardOpen = (bool) => {
+    dispatch(createAction(CARD_ACTION_TYPE_ACTION.SET_IS_CARD_OPEN, bool));
+  };
+
   const value = {
     isCardOpen,
     cardItems,
