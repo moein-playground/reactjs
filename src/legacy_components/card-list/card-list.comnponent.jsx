@@ -1,5 +1,6 @@
 import './card-list.style.css';
 import MonsterCard from '../card/card.component';
+import { Fragment } from 'react';
 
 const CardList = ({ monsters }) => (
   <div className="card-list">
@@ -11,3 +12,4 @@ const CardList = ({ monsters }) => (
 );
 
 export default CardList;
+
