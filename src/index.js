@@ -5,8 +5,6 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { UserProvider } from './contex/user.contex';
-import { CategoriesProvider } from './contex/categories.context';
 import { CardProvider } from './contex/card.context';
 import { store } from './store/store';
 
@@ -15,11 +13,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <CategoriesProvider>
-          <CardProvider>
-            <App />
-          </CardProvider>
-        </CategoriesProvider>
+        <CardProvider>
+          <App />
+        </CardProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

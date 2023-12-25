@@ -25,6 +25,14 @@ const App = () => {
       dispatch(setCurrentUser(user));
     });
 
+    const getCategoriesMap = async () => {
+      const categoriesMap = await getCatgoriesAndDocuments();
+      setCategoriesMap(categoriesMap);
+    };
+    getCategoriesMap();
+
+
+
     return unsubscribe;
   }, []);
 
