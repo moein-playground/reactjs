@@ -5,7 +5,6 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { CardProvider } from './contex/card.context';
 import { store } from './store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,9 +12,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <CardProvider>
-          <App />
-        </CardProvider>
+        <App />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

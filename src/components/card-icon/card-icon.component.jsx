@@ -1,15 +1,21 @@
-import { useContext } from 'react';
-import { CardContext } from '../../contex/card.context';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   CardIconContainer,
   ShoppingIcon,
   ItemCount,
 } from './card-icon.styles.jsx';
+import {
+  selectCardIsOpen,
+  selectCardCount,
+} from '../../store/card/card.selector.js';
+import { setIsCardOpen } from '../../store/card/card.actions.js';
 
 const CardIcon = () => {
-  const { isCardOpen, setIsCardOpen, cardCount } = useContext(CardContext);
+  const dispatch = useDispatch();
+  const isCardOpen = useSelector(selectCardIsOpen);
+  const cardCount = useSelector(selectCardCount);
 
-  const toggleIsCardOpen = () => setIsCardOpen(!isCardOpen);
+  const toggleIsCardOpen = () => dispatch(setIsCardOpen(!isCardOpen));
 
   return (
     <CardIconContainer onClick={toggleIsCardOpen}>

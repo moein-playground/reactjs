@@ -1,9 +1,9 @@
-import { Fragment, useContext } from 'react';
+import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
 import { signOutUser } from '../../utils/firebase-utils/firebase.utils';
 import { useSelector } from 'react-redux';
 
-import { CardContext } from '../../contex/card.context';
+import { selectCardIsOpen } from '../../store/card/card.selector';
 import { selectCurrentUser } from '../../store/user/user.selector';
 
 import { ReactComponent as CrwLogo } from '../../assets/crown.svg';
@@ -20,7 +20,7 @@ import {
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
 
-  const { isCardOpen } = useContext(CardContext);
+  const isCardOpen = useSelector(selectCardIsOpen);
 
   return (
     <Fragment>

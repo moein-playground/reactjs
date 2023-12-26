@@ -31,8 +31,6 @@ const App = () => {
     };
     getCategoriesMap();
 
-
-
     return unsubscribe;
   }, []);
 

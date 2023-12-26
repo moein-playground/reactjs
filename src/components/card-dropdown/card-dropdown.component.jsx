@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { CardContext } from '../../contex/card.context';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CardItem from '../card-item/card-item.component';
 import Button from '../button/button.component';
@@ -8,9 +7,10 @@ import {
   EmptyMessage,
   CardItems,
 } from './card-dropdown.styles';
+import { selectCardItems } from '../../store/card/card.selector';
 
 const CardDropdown = () => {
-  const { cardItems } = useContext(CardContext);
+  const cardItems = useSelector(selectCardItems);
   const navigate = useNavigate();
 
   const goToCheckoutHandler = () => {
