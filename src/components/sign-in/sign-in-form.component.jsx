@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import {
-  createUserDocumentFromAuth,
-  signInWithGooglePopup,
-  signInWithUserEmailAndPassword,
-} from '../../utils/firebase-utils/firebase.utils';
+import { useDispatch } from 'react-redux';
 import FormInput from '../../components/form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
-import './sign-in-form.styles.scss';
 
+import './sign-in-form.styles.scss';
+import {
+  googleSignInStart,
+  emailSignInStart,
+} from '../../store/user/user.action';
 const defaultFormFileds = {
   email: '',
   password: '',
 };
 
 const SignInForm = () => {
+  const dispatch = useDispatch();
   const [formFileds, setFormFileds] = useState(defaultFormFileds);
   const { email, password } = formFileds;
 
@@ -25,12 +26,12 @@ const SignInForm = () => {
     setFormFileds({ ...formFileds, [name]: value });
   };
   const signInWithGoogle = async () => {
-    await signInWithGooglePopup();
+    dispatch(googleSignInStart());
   };
   const handelSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { user } = await signInWithUserEmailAndPassword(email, password);
+      dispatch(emailSignInStart(email, password));
       resetFormFileds();
     } catch (error) {
       // TODO:you can add more error handeling like switch case ...
