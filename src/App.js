@@ -13,6 +13,7 @@ import Authentication from './routes/authentication/authentication.component';
 import Shop from './routes/shop/shop.component';
 import Checkout from './routes/checkout/checkout.component';
 import { setCurrentUser } from './store/user/user.action';
+import { fetchCategoriesAsync } from './store/categories/categories.actions';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -26,8 +27,7 @@ const App = () => {
     });
 
     const getCategoriesMap = async () => {
-      const categoriesMap = await getCatgoriesAndDocuments();
-      setCategoriesMap(categoriesMap);
+      dispatch(fetchCategoriesAsync());
     };
     getCategoriesMap();
 

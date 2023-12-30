@@ -3,18 +3,22 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger';
 import { rootReducer } from './root-reducer';
+import { thunk } from 'redux-thunk';
 
 const persistConfig = {
   key: 'root',
   storage,
-  //list we donr want to presist
+  //list we dont want to presist
   blackList: ['user'],
+  whiteList: ['card'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middleWares = [process.env.NODE_ENV !== 'production' && logger].filter(
-  Boolean,
-);
+const middleWares = [
+  process.env.NODE_ENV !== 'production' && logger,
+  thunk,
+].filter(Boolean);
+
 const composeEnhanser =
   (process.env.NODE_ENV !== 'production' &&
     window &&
