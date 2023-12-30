@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   createUserDocumentFromAuth,
+  getCurrentUser,
   onAuthStateChangeListener,
   // signOutUser,
 } from '../src/utils/firebase-utils/firebase.utils';
@@ -19,19 +20,14 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangeListener((user) => {
-      if (user) {
-        createUserDocumentFromAuth(user);
-      }
-      dispatch(setCurrentUser(user));
+    getCurrentUser().then((user) => {
+      console.log('this is our user', user);
     });
 
     const getCategoriesMap = async () => {
       dispatch(fetchCategoriesStart());
     };
     getCategoriesMap();
-
-    return unsubscribe;
   }, []);
 
   return (
