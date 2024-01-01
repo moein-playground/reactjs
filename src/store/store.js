@@ -11,7 +11,7 @@ const persistConfig = {
   key: 'root',
   storage,
   //list we dont want to presist
-  blackList: ['user'],
+  // blackList: ['user'],
   whiteList: ['card'],
 };
 
